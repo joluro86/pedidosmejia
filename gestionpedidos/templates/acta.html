@@ -1,0 +1,82 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <form method="post" onsubmit="return validarFechas()">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="numero">Número:</label>
+            <input type="number" name="numero" id="numero" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="inicio_rango_fecha_ejecucion">Inicio rango fecha ejecución:</label>
+            <input type="date" name="inicio_rango_fecha_ejecucion" id="inicio_rango_fecha_ejecucion"
+                class="form-control" required>
+            <span id="error_inicio_fecha_ejecucion" class="text-danger" style="display: none;">La fecha de inicio debe
+                ser menor o igual que la fecha final.</span>
+        </div>
+        <div class="form-group">
+            <label for="final_rango_fecha_ejecucion">Final rango fecha ejecución:</label>
+            <input type="date" name="final_rango_fecha_ejecucion" id="final_rango_fecha_ejecucion" class="form-control"
+                required>
+            <span id="error_final_fecha_ejecucion" class="text-danger" style="display: none;">La fecha final debe ser
+                mayor o igual que la fecha de inicio.</span>
+        </div>
+        <div class="form-group">
+            <label for="estado">Estado:</label>
+            <select name="estado" id="estado" class="form-control" required>
+                <option value="1">Estado 1</option>
+                <option value="2">Estado 2</option>
+                <!-- Agregar otras opciones de estado si es necesario -->
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+</div>
+
+<script>
+    function validarFechas() {
+        const inicioFecha = new Date(document.getElementById('inicio_rango_fecha_ejecucion').value);
+        const finalFecha = new Date(document.getElementById('final_rango_fecha_ejecucion').value);
+        const errorInicioFecha = document.getElementById('error_inicio_fecha_ejecucion');
+        const errorFinalFecha = document.getElementById('error_final_fecha_ejecucion');
+
+        // Fecha actual
+        const fechaActual = new Date();
+        // Fecha máxima permitida (hacia adelante 1 año desde la fecha actual)
+        const fechaMaxima = new Date(fechaActual);
+        fechaMaxima.setFullYear(fechaActual.getFullYear() + 1);
+        // Fecha mínima permitida (hacia atrás 1 año desde la fecha actual)
+        const fechaMinima = new Date(fechaActual);
+        fechaMinima.setFullYear(fechaActual.getFullYear() - 1);
+
+        if (inicioFecha > finalFecha) {
+            errorInicioFecha.style.display = 'block';
+            errorFinalFecha.style.display = 'none';
+            return false; // Evita enviar el formulario si la validación falla
+        } else {
+            errorInicioFecha.style.display = 'none';
+        }
+
+        if (inicioFecha > fechaMaxima || inicioFecha < fechaMinima) {
+            errorInicioFecha.innerText = 'Fecha no permitida.';
+            errorInicioFecha.style.display = 'block';
+        } else {
+            errorInicioFecha.style.display = 'none';
+        }
+
+        if (finalFecha > fechaMaxima || finalFecha < fechaMinima) {
+            errorFinalFecha.innerText = 'Fecha no permitidad.';
+            errorFinalFecha.style.display = 'block';
+        } else {
+            errorFinalFecha.style.display = 'none';
+        }
+
+        return !(inicioFecha > fechaMaxima || inicioFecha < fechaMinima || finalFecha > fechaMaxima || finalFecha < fechaMinima);
+    }
+</script>
+
+
+
+
+{% endblock content %}
