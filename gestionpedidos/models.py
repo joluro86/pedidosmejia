@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 
 class Acta(models.Model):
 
@@ -13,7 +13,7 @@ class Acta(models.Model):
     final_rango_fecha_ejecucion = models.DateField(null=False)
     estado = models.CharField(max_length=20, choices=ESTADO_ACTA, default='1')
     fecha_registro = models.DateTimeField(auto_now_add=True)
-    usuario_registro = models.CharField(max_length=200, null=False, default="1") # ESTO SE CAMBIARA OJO
+    usuario_registro = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, editable=False)
 
 
     class Meta:
@@ -36,15 +36,13 @@ class Actividad(models.Model):
     def __str__(self):
         return self.nombre
     
-class CustomUser(AbstractUser):
-    cedula = models.CharField(max_length=20, default=100) 
 
 class Oficial(models.Model):
     ESTADO_OFICIAL = (
         ('1', 'Activo'),
         ('0', 'Inactivo'),
     )
-    usuario = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
     cedula = models.IntegerField(unique=True, null=False)
     nombre= models.CharField(max_length=100, null=False)
     estado = models.CharField(max_length=20, choices=ESTADO_OFICIAL, default='1')
