@@ -1,37 +1,43 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<div class="container mt-5 max-width-500">
-    <form  method="post" onsubmit="return validarFechas()">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="numero">Número:</label>
-            <input type="number" name="numero" id="numero" class="form-control" required>
+<div class="row container max-width-500 mt-3">
+    
+        <div class="col-md-9">
+            <h4 class="text-center text-secondary">Crear Acta</h4>
+            <form method="post" onsubmit="return validarFechas()">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="numero">Número:</label>
+                    <input type="number" name="numero" id="numero" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="inicio_rango_fecha_ejecucion">Inicio rango fecha ejecución:</label>
+                    <input type="date" name="inicio_rango_fecha_ejecucion" id="inicio_rango_fecha_ejecucion"
+                        class="form-control" required>
+                    <span id="error_inicio_fecha_ejecucion" class="text-danger" style="display: none;">La fecha de
+                        inicio debe
+                        ser menor o igual que la fecha final.</span>
+                </div>
+                <div class="form-group">
+                    <label for="final_rango_fecha_ejecucion">Final rango fecha ejecución:</label>
+                    <input type="date" name="final_rango_fecha_ejecucion" id="final_rango_fecha_ejecucion"
+                        class="form-control" required>
+                    <span id="error_final_fecha_ejecucion" class="text-danger" style="display: none;">La fecha final
+                        debe ser
+                        mayor o igual que la fecha de inicio.</span>
+                </div>
+                <div class="form-group">
+                    <label for="estado">Estado:</label>
+                    <select name="estado" id="estado" class="form-control" required>
+                        <option value="1">En ejecución</option>
+                        <option value="0">Cerrada</option>
+                        <!-- Agregar otras opciones de estado si es necesario -->
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Enviar</button>
+            </form>
         </div>
-        <div class="form-group">
-            <label for="inicio_rango_fecha_ejecucion">Inicio rango fecha ejecución:</label>
-            <input type="date" name="inicio_rango_fecha_ejecucion" id="inicio_rango_fecha_ejecucion"
-                class="form-control" required>
-            <span id="error_inicio_fecha_ejecucion" class="text-danger" style="display: none;">La fecha de inicio debe
-                ser menor o igual que la fecha final.</span>
-        </div>
-        <div class="form-group">
-            <label for="final_rango_fecha_ejecucion">Final rango fecha ejecución:</label>
-            <input type="date" name="final_rango_fecha_ejecucion" id="final_rango_fecha_ejecucion" class="form-control"
-                required>
-            <span id="error_final_fecha_ejecucion" class="text-danger" style="display: none;">La fecha final debe ser
-                mayor o igual que la fecha de inicio.</span>
-        </div>
-        <div class="form-group">
-            <label for="estado">Estado:</label>
-            <select name="estado" id="estado" class="form-control" required>
-                <option value="1">En ejecución</option>
-                <option value="0">Cerrada</option>
-                <!-- Agregar otras opciones de estado si es necesario -->
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Enviar</button>
-    </form>
 </div>
 
 <script>
